@@ -4,6 +4,7 @@
 /* global afterEach: false */
 /* jshint unused: false */
 /* jshint expr: true */
+/* jshint maxcomplexity: 10 */
 
 'use strict';
 
@@ -28,11 +29,17 @@ describe('deck storage', function () {
 	
 	describe('get', function (done) {
 		it('gets an existing deck', function (done) {
-			var uniqueData = uuid.v4();
+			var uniqueDeck = uuid.v4(),
+				uniqueDrawn = uuid.v4(),
+				uniqueDiscarded = uuid.v4(),
+				uniqueRemoved = uuid.v4();
 			// create a deck
 			request(app)
 				.post('/deck')
-				.send({ deck: { uniqueData: uniqueData }})
+				.send({ deck: uniqueDeck,
+					drawn: uniqueDrawn,
+					discarded: uniqueDiscarded,
+					removed: uniqueRemoved })
 				.set('Accept', 'application/json')
 				.set('Content-type', 'application/json')
 				.expect(201)
@@ -58,7 +65,12 @@ describe('deck storage', function () {
 								return 'id mismatch on get';
 							} else if (!res.body.deck) {
 								return 'no deck data';
-							} else if (res.body.deck.uniqueData !== uniqueData) {
+							} else if (res.body.deck !== uniqueDeck ||
+								res.body.drawn !== uniqueDrawn ||
+								res.body.discarded !== uniqueDiscarded ||
+								res.body.removed !== uniqueRemoved
+								) {
+								console.log('body ', res.body);
 								return 'incorrect deck data';
 							}
 						})
@@ -71,10 +83,16 @@ describe('deck storage', function () {
 		
 	describe('post', function (done) {
 		it('returns a storage id which can be used to retrieve the deck', function (done) {
-			var uniqueData = uuid.v4();
+			var uniqueDeck = uuid.v4(),
+				uniqueDrawn = uuid.v4(),
+				uniqueDiscarded = uuid.v4(),
+				uniqueRemoved = uuid.v4();
 			request(app)
 				.post('/deck')
-				.send({ deck: { uniqueData: uniqueData }})
+				.send({ deck: uniqueDeck,
+					drawn: uniqueDrawn,
+					discarded: uniqueDiscarded,
+					removed: uniqueRemoved })
 				.set('Accept', 'application/json')
 				.set('Content-type', 'application/json')
 				.expect(201)
@@ -92,7 +110,10 @@ describe('deck storage', function () {
 						.set('Accept', 'application/json')
 						.expect(200)
 						.expect(function (res) {
-							if (res.body.deck.uniqueData !== uniqueData) {
+							if (res.body.deck !== uniqueDeck ||
+								res.body.drawn !== uniqueDrawn ||
+								res.body.discarded !== uniqueDiscarded ||
+								res.body.removed !== uniqueRemoved) {
 								return 'get request did not return correct deck';
 							}
 						})
@@ -105,11 +126,17 @@ describe('deck storage', function () {
 	
 	describe('delete', function (done) {
 		it('removes an existing deck', function (done) {
-			var uniqueData = uuid.v4();
+			var uniqueDeck = uuid.v4(),
+				uniqueDrawn = uuid.v4(),
+				uniqueDiscarded = uuid.v4(),
+				uniqueRemoved = uuid.v4();
 			// create a deck
 			request(app)
 				.post('/deck')
-				.send({ deck: { uniqueData: uniqueData }})
+				.send({ deck: uniqueDeck,
+					drawn: uniqueDrawn,
+					discarded: uniqueDiscarded,
+					removed: uniqueRemoved })
 				.set('Accept', 'application/json')
 				.set('Content-type', 'application/json')
 				.expect(201)
@@ -153,11 +180,17 @@ describe('deck storage', function () {
 
 	describe('put', function (done) {
 		it('update a deck', function (done) {
-			var uniqueData = uuid.v4();
+			var uniqueDeck = uuid.v4(),
+				uniqueDrawn = uuid.v4(),
+				uniqueDiscarded = uuid.v4(),
+				uniqueRemoved = uuid.v4();
 			// create a deck with some unique data
 			request(app)
 				.post('/deck')
-				.send({ deck: { uniqueData: uniqueData }})
+				.send({ deck: uniqueDeck,
+					drawn: uniqueDrawn,
+					discarded: uniqueDiscarded,
+					removed: uniqueRemoved })
 				.set('Accept', 'application/json')
 				.set('Content-type', 'application/json')
 				.expect(201)
@@ -167,17 +200,27 @@ describe('deck storage', function () {
 					}
 				})
 				.end(function (err, res) {
-					var newUniqueData,
+					var uniqueDeck,
+						uniqueDrawn,
+						uniqueDiscarded,
+						uniqueRemoved,
 						deckId;
 					if (err) {
 						return done(err);
 					}
-					newUniqueData = uuid.v4();
+					uniqueDeck = uuid.v4(),
+					uniqueDrawn = uuid.v4(),
+					uniqueDiscarded = uuid.v4(),
+					uniqueRemoved = uuid.v4();
 					deckId = res.body.id;
 					// update the deck
 					request(app)
 						.put('/deck')
-						.send({ id: deckId, deck: { uniqueData: newUniqueData }})
+						.send({ id: deckId,
+							deck: uniqueDeck,
+							drawn: uniqueDrawn,
+							discarded: uniqueDiscarded,
+							removed: uniqueRemoved })
 						.set('Accept', 'application/json')
 						.set('Content-type', 'application/json')
 						.expect(200)
@@ -197,7 +240,10 @@ describe('deck storage', function () {
 										return 'wrong id returned on get';
 									} else if (!res.body.deck) {
 										return 'no deck returned on get';
-									} else if (res.body.deck.uniqueData !== newUniqueData) {
+									} else if (res.body.deck !== uniqueDeck ||
+										res.body.drawn !== uniqueDrawn ||
+										res.body.discarded !== uniqueDiscarded ||
+										res.body.removed !== uniqueRemoved) {
 										return 'deck data was not updated';
 									}
 								})
