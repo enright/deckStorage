@@ -1,7 +1,7 @@
 {
-  "name": "deckStorage",
+  "name": "rollerStorage",
   "version": "0.0.1",
-  "description": "store decks of cards in dynamo",
+  "description": "store dice rolls and bonus in dynamo",
   "author": "Bill Enright <bill@yisup.com>",
   "main": "index.js",
   "scripts": {
