@@ -29,10 +29,10 @@ describe('deck storage', function () {
 	
 	describe('get', function (done) {
 		it('gets an existing deck', function (done) {
-			var uniqueDeck = uuid.v4(),
-				uniqueDrawn = uuid.v4(),
-				uniqueDiscarded = uuid.v4(),
-				uniqueRemoved = uuid.v4();
+			var uniqueDeck = [uuid.v4()],
+				uniqueDrawn = [uuid.v4()],
+				uniqueDiscarded = [uuid.v4()],
+				uniqueRemoved = [uuid.v4()];
 			// create a deck
 			request(app)
 				.post('/deck')
@@ -65,10 +65,10 @@ describe('deck storage', function () {
 								return 'id mismatch on get';
 							} else if (!res.body.deck) {
 								return 'no deck data';
-							} else if (res.body.deck !== uniqueDeck ||
-								res.body.drawn !== uniqueDrawn ||
-								res.body.discarded !== uniqueDiscarded ||
-								res.body.removed !== uniqueRemoved
+							} else if (res.body.deck[0] !== uniqueDeck[0] ||
+								res.body.drawn[0] !== uniqueDrawn[0] ||
+								res.body.discarded[0] !== uniqueDiscarded[0] ||
+								res.body.removed[0] !== uniqueRemoved[0]
 								) {
 								console.log('body ', res.body);
 								return 'incorrect deck data';
@@ -83,10 +83,10 @@ describe('deck storage', function () {
 		
 	describe('post', function (done) {
 		it('returns a storage id which can be used to retrieve the deck', function (done) {
-			var uniqueDeck = uuid.v4(),
-				uniqueDrawn = uuid.v4(),
-				uniqueDiscarded = uuid.v4(),
-				uniqueRemoved = uuid.v4();
+			var uniqueDeck = [uuid.v4()],
+				uniqueDrawn = [uuid.v4()],
+				uniqueDiscarded = [uuid.v4()],
+				uniqueRemoved = [uuid.v4()];
 			request(app)
 				.post('/deck')
 				.send({ deck: uniqueDeck,
@@ -110,10 +110,10 @@ describe('deck storage', function () {
 						.set('Accept', 'application/json')
 						.expect(200)
 						.expect(function (res) {
-							if (res.body.deck !== uniqueDeck ||
-								res.body.drawn !== uniqueDrawn ||
-								res.body.discarded !== uniqueDiscarded ||
-								res.body.removed !== uniqueRemoved) {
+							if (res.body.deck[0] !== uniqueDeck[0] ||
+								res.body.drawn[0] !== uniqueDrawn[0] ||
+								res.body.discarded[0] !== uniqueDiscarded[0] ||
+								res.body.removed[0] !== uniqueRemoved[0]) {
 								return 'get request did not return correct deck';
 							}
 						})
@@ -126,10 +126,10 @@ describe('deck storage', function () {
 	
 	describe('delete', function (done) {
 		it('removes an existing deck', function (done) {
-			var uniqueDeck = uuid.v4(),
-				uniqueDrawn = uuid.v4(),
-				uniqueDiscarded = uuid.v4(),
-				uniqueRemoved = uuid.v4();
+			var uniqueDeck = [uuid.v4()],
+				uniqueDrawn = [uuid.v4()],
+				uniqueDiscarded = [uuid.v4()],
+				uniqueRemoved = [uuid.v4()];
 			// create a deck
 			request(app)
 				.post('/deck')
@@ -180,10 +180,10 @@ describe('deck storage', function () {
 
 	describe('put', function (done) {
 		it('update a deck', function (done) {
-			var uniqueDeck = uuid.v4(),
-				uniqueDrawn = uuid.v4(),
-				uniqueDiscarded = uuid.v4(),
-				uniqueRemoved = uuid.v4();
+			var uniqueDeck = [uuid.v4()],
+				uniqueDrawn = [uuid.v4()],
+				uniqueDiscarded = [uuid.v4()],
+				uniqueRemoved = [uuid.v4()];
 			// create a deck with some unique data
 			request(app)
 				.post('/deck')
@@ -208,10 +208,10 @@ describe('deck storage', function () {
 					if (err) {
 						return done(err);
 					}
-					uniqueDeck = uuid.v4(),
-					uniqueDrawn = uuid.v4(),
-					uniqueDiscarded = uuid.v4(),
-					uniqueRemoved = uuid.v4();
+					uniqueDeck = [uuid.v4()],
+					uniqueDrawn = [uuid.v4()],
+					uniqueDiscarded = [uuid.v4()],
+					uniqueRemoved = [uuid.v4()];
 					deckId = res.body.id;
 					// update the deck
 					request(app)
@@ -240,10 +240,10 @@ describe('deck storage', function () {
 										return 'wrong id returned on get';
 									} else if (!res.body.deck) {
 										return 'no deck returned on get';
-									} else if (res.body.deck !== uniqueDeck ||
-										res.body.drawn !== uniqueDrawn ||
-										res.body.discarded !== uniqueDiscarded ||
-										res.body.removed !== uniqueRemoved) {
+									} else if (res.body.deck[0] !== uniqueDeck[0] ||
+										res.body.drawn[0] !== uniqueDrawn[0] ||
+										res.body.discarded[0] !== uniqueDiscarded[0] ||
+										res.body.removed[0] !== uniqueRemoved[0]) {
 										return 'deck data was not updated';
 									}
 								})
