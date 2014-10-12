@@ -18,7 +18,7 @@ describe('deck storage', function () {
 	var app;
 
 	beforeEach(function (done) {
-		app = deckStorage.start(3002);
+		app = deckStorage.start(5002);
 		done();
 	});
 
